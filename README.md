@@ -1,5 +1,62 @@
-# multimodalRAG
+# Mini Qwen
 
-- 为了解决传统RAG系统OCR +文本分块带来的处理时间长、召回结果差、只能利用文本embedding召回的问题，我们构建了基于Qwen2.5VL的多模态能力的原生PDF截图的嵌入-召回-问答pipeline。
-- 系统在PDF缩略图的多模态向量库基于Late Interaction计算召回相似度(比cosine相似度更精细)，并且利用Qwen2.5VL的原生分辨率进行召回图像动态分辨率的QA问答。
-- 为了提升Qwen2.5VL在PDF问答上的图标理解能力，我们在pdfvqa/chartQA上进行SFT。并且搭建了基于DeepSeek-Chat的Agent评测系统，自动化评测3k+QA,问答准确率达到x%，相比基线提高x00.
+> 多模态大模型项目代码，by 古希腊掌管代码的神
+
+
+
+## Python Environment
+
+- 安装环境
+
+```bash
+pip install -r requirements.txt
+```
+
+
+## Download Data
+
+> 所以需要的数据都写在这个脚本里了，如果需要分次下载请进入脚本注释
+
+```bash
+bash download_data.sh
+```
+
+## Downlaod Model
+
+> 所以需要的模型都写在这个脚本里了，如果需要分次下载请进入脚本注释
+
+```bash
+bash download_models.sh
+```
+
+## SFT
+
+- single GPU
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python qwen25vl_sft.py
+```
+
+- multi GPU
+
+```bash
+accelerate launch --config_file accelerate_config.yaml qwen25vl_sft.py
+
+# 后台运行，最好改成绝对路径
+nohup accelerate launch --config_file accelerate_config.yaml qwen25vl_sft.py > logs/output_pt.log 2>&1 &
+```
+
+## mRAG
+
+- Data Synthesis 
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python mini_vlm/qwen25vl_mRAG_eval_data.py
+```
+
+- Evaluate
+> 需要修改其中DeepSeek API Key
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python mini_vlm/qwen25vl_mRAG_eval.py
+```
