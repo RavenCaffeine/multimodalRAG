@@ -1,1 +1,5 @@
 # multimodalRAG
+
+为了解决传统RAG系统OCR +文本分块带来的处理时间长、召回结果差、只能利用文本embedding召回的问题，我们构建了基于Qwen2.5VL的多模态能力的原生PDF截图的嵌入-召回-问答pipeline。
+系统在PDF缩略图的多模态向量库基于Late Interaction计算召回相似度(比cosine相似度更精细)，并且利用Qwen2.5VL的原生分辨率进行召回图像动态分辨率的QA问答。
+为了提升Qwen2.5VL在PDF问答上的图标理解能力，我们在pdfvqa/chartQA上进行SFT。并且搭建了基于DeepSeek-Chat的Agent评测系统，自动化评测3k+QA,问答准确率达到x%，相比基线提高x00.
